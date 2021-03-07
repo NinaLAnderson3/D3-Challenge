@@ -1,21 +1,19 @@
 // @TODO: YOUR CODE HERE!
-//svg container
 var svgWidth = 960;
 var svgHeight = 500;
 
-//margins
 var margin = {
   top: 20,
   right: 40,
   bottom: 60,
   left: 100
 };
-//chart area minus margins
+
 var width = svgWidth - margin.left - margin.right;
 var height = svgHeight - margin.top - margin.bottom;
 
 // Create an SVG wrapper, append an SVG group that will hold our chart, and shift the latter by left and top margins.
-var svg = d3.select("#scatter")
+var svg = d3.select(".chart")
   .append("svg")
   .attr("width", svgWidth)
   .attr("height", svgHeight);
@@ -24,24 +22,24 @@ var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 // Import Data
-d3.csv("data.csv").then(function(censusData) {
-    console.log(censusData)
+d3.csv("/../data/data.csv").then(function(censusData) {
 
     //parse poverty and healthcare data
     censusData.forEach(function(data){
+        data.state = data.state;
         data.poverty = +data.poverty;
         data.healthcare = +data.healthcare;
     });
-
-   
+    console.log(data)
 
     //create scale functions
     var xLinearScale = d3.scaleLinear()
-    .domain([20, d3.max(censusData, d=> d.poverty)])
+    .domain([20, d3.max(data, d=> d.poverty)])
     .range([0,width]);
+    console.log(d.poverty)
 
     var yLinearScale = d3.scaleLinear()
-    .domain([0, d3.max(censusData, d=> d.healthcare)])
+    .domain([0, d3.max(data, d=> d.healthcare)])
     .range([height, 0]);
 
     //create axis functions
@@ -62,8 +60,6 @@ d3.csv("data.csv").then(function(censusData) {
     .attr("cx", d=> xLinearScale(d.poverty))
     .attr("cy", d=> yLinearScale(d.healthcare))
     .attr("r","15")
-    .attr("height", height)
-    .attr("width", width)
     .attr("fill","blue")
     .attr("opacity","0.5");
 
@@ -72,7 +68,7 @@ d3.csv("data.csv").then(function(censusData) {
         .attr("class","tooltip")
         .offset([80,-60])
         .html(function(d){
-            return (`${d.abbr}<tr>Poverty Level: ${d.poverty}<tr>Healthcare Level: ${d.healthcare}`);
+            return (`${d.state}<tr>Poverty Level: ${d.poverty}<tr>Healthcare Level: ${d.healthcare}`);
         });
 
         //create tooltip in chart
@@ -99,8 +95,8 @@ d3.csv("data.csv").then(function(censusData) {
         chartGroup.append("text")
             .attr("transform", `translate(${width /2}, ${height + margin.top + 30})`)
             .attr("class", "axisText")
-            .text("Poverty & Healthcare in America")
+            .text("Poverty & Healthcare in America");
     });
     // .catch(function(error){
-    //     console.log(error);
+    //     console/log(error);
     // });
