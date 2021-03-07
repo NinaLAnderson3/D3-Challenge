@@ -30,28 +30,6 @@ d3.csv("data.csv").then(function(censusData) {
       data.healthcare = +data.healthcare;
     });
 
-    var dlLinearRegression = function(data) {
-        var mapData = data;
-        // perform linear regression analysis
-        // variable lin contains the model
-        var lin = dl.linearRegression(mapData,
-          function(d) {
-            return d[0];
-          },
-          function(d) {
-            return d[1];
-          }
-        );
-        var result = [];
-        // use equation to calculate result data points
-        // y = slope * x + intercept
-        mapData.forEach(function(d) {
-          result.push([d[0], lin.slope * d[0] + lin.intercept]);
-        })
-      
-        return result;
-      }
-
     // Step 2: Create scale functions
     // ==============================
     var xLinearScale = d3.scaleLinear()
@@ -84,8 +62,7 @@ d3.csv("data.csv").then(function(censusData) {
     .attr("cx", d => xLinearScale(d.poverty))
     .attr("cy", d => yLinearScale(d.healthcare))
     .attr("r", "15")
-    .attr("fill", "pink")
-    .attr("opacity", ".5")
+    .attr("fill", "gray")
     .on("mouseover", function(data) {
         toolTip.show(data, this)})
     .on("mouseout", function(data, index) {
